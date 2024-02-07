@@ -1,42 +1,49 @@
-# docker-python-helloworld
-A Python dockerized hello world app
-This repo aims at showing how simple it can be to build a Docker container running a Python (very simple) app.
-Once you understand how this simple example works, it's easy to apply it to bigger apps.
+# Cloud Run Hello World Sample
 
-### Steps to run directly the python code
-It's highly recommended to install the (empty) dependencies in a virtual environment.
+This sample shows how to deploy a Hello World application to Cloud Run.
 
-- Creating the virtual environment: 
-```bash
-virtualenv venv
+[![Run in Google Cloud][run_img]][run_link]
+
+[run_img]: https://storage.googleapis.com/cloudrun/button.svg
+[run_link]: https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_image=gcr.io/cloudrun/button&cloudshell_git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&cloudshell_working_dir=run/helloworld
+
+## Build
+
+* Set an environment variable with your GCP Project ID:
+
+```
+export GOOGLE_CLOUD_PROJECT=<PROJECT_ID>
 ```
 
-- Activatingv the virtual environment:
-```bash
-source venv/bin/activate
-```
-- Installing dependencies:
-```bash
-pip install -r requirements.txt
+* Use a [Buildpack](https://github.com/GoogleCloudPlatform/buildpacks) to build the container:
+
+```sh
+gcloud builds submit --pack image=gcr.io/${GOOGLE_CLOUD_PROJECT}/helloworld
 ```
 
-- Running the code:
-```bash
-python main.py
+## Run Locally
+
+```sh
+docker run --rm gcr.io/${GOOGLE_CLOUD_PROJECT}/helloworld
+```
+
+## Test
+
+```
+pytest
+```
+
+_Note: you may need to install `pytest` using `pip install pytest`._
+
+## Deploy
+
+```sh
+# Set an environment variable with your GCP Project ID
+export GOOGLE_CLOUD_PROJECT=<PROJECT_ID>
+
+# Deploy to Cloud Run
+gcloud run deploy helloworld --source .
 ```
 
 
-### Steps to run the python code withing a Docker container
-
-- Build the image:
-```bash
-docker build -t docker-python-helloworld:lastest
-```
-
-- Run the container:
-```bash
-docker run docker-python-helloworld:latest 
-```
-
-
-
+For more details on how to work with this sample read the [Python Cloud Run Samples README](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/main/run)
